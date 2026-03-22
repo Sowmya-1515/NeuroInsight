@@ -379,7 +379,7 @@ app = Flask(__name__, static_folder="static", static_url_path="/static")
 CORS(app)
 
 engine = None
-
+import threading
 
 def get_engine():
     global engine
@@ -387,7 +387,14 @@ def get_engine():
         engine = RetrievalEngine()
     return engine
 
+# Pre-load engine in background thread so port opens immediately
+def preload_engine():
+    global engine
+    print("[NeuroInsight] Pre-loading engine in background...")
+    engine = RetrievalEngine()
+    print("[NeuroInsight] Engine ready!")
 
+threading.Thread(target=preload_engine, daemon=True).start()
 # ── Routes ────────────────────────────────────────────────────────────────
 
 @app.route("/")
@@ -429,4 +436,4 @@ if __name__ == "__main__":
     print("  Starting at http://localhost:8002")
     print("=" * 60)
     port = int(os.environ.get("PORT", 8002))
-        app.run(debug=False, host="0.0.0.0", port=port)
+    app.run(debug=False, host="0.0.0.0", port=port)
