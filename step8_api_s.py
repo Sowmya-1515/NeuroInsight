@@ -11,9 +11,11 @@ Endpoints:
 """
 
 import os
-import json
+import io
 import time
 import base64
+import threading
+import urllib.request
 import numpy as np
 import pandas as pd
 import torch
@@ -30,20 +32,10 @@ import torch.nn.functional as F
 
 # ============================================================
 # CONFIG
-# FIX: Use dynamic BASE_DIR instead of hardcoded absolute path
 # ============================================================
-BASE_DIR   = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(BASE_DIR, "training_output_enhanced", "best_model.pth")
-
-# Download model from Hugging Face if not present locally
-HF_MODEL_URL = "https://huggingface.co/Sowmyas15/NeuroInsight-model/resolve/main/best_model.pth"
-if not os.path.exists(MODEL_PATH):
-    import urllib.request
-    os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
-    print("[NeuroInsight] Downloading model from Hugging Face...")
-    urllib.request.urlretrieve(HF_MODEL_URL, MODEL_PATH)
-    print("[NeuroInsight] Model downloaded successfully!")
-
+BASE_DIR       = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH     = os.path.join(BASE_DIR, "training_output_enhanced", "best_model.pth")
+HF_MODEL_URL   = "https://huggingface.co/Sowmyas15/NeuroInsight-model/resolve/main/best_model.pth"
 FAISS_DIR      = os.path.join(BASE_DIR, "faiss_index")
 EMBEDDINGS_DIR = os.path.join(BASE_DIR, "embeddings_output")
 
@@ -167,7 +159,6 @@ def apply_heatmap(original_img: Image.Image, cam: np.ndarray) -> str:
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.cm as cm
-
     orig    = np.array(original_img.resize((IMG_SIZE, IMG_SIZE)).convert("RGB"))
     heat    = cm.jet(cam)[:, :, :3]
     heat    = (heat * 255).astype(np.uint8)
@@ -210,8 +201,19 @@ class RetrievalEngine:
         return torch.device("cpu")
 
     def _load(self):
+        # ── FIX: Download model from Hugging Face INSIDE _load ──
+        # This runs in a background thread so gunicorn can bind the port first
+        if not os.path.exists(MODEL_PATH):
+            print("[NeuroInsight] Model not found locally, downloading from Hugging Face...")
+            os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
+            urllib.request.urlretrieve(HF_MODEL_URL, MODEL_PATH)
+            print("[NeuroInsight] Model downloaded successfully!")
+        else:
+            print("[NeuroInsight] Model found locally, skipping download.")
+
         print(f"[NeuroScan] Device: {self.device}")
 
+        # Load model
         print("[NeuroInsight] Loading model...")
         self.model = Phase2Model(embedding_dim=EMBED_DIM, pretrained=False).to(self.device)
         missing, unexpected = self.model.load_state_dict(
@@ -223,15 +225,18 @@ class RetrievalEngine:
             print(f"[NeuroInsight] Unexpected keys: {unexpected}")
         self.model.eval()
 
+        # Grad-CAM
         target_layer  = list(self.model.encoder.children())[-3][-1].conv3
         self.grad_cam = GradCAM(self.model, target_layer)
         print("[NeuroScan] Model loaded ✓")
 
-        faiss_path = os.path.join(FAISS_DIR, "faiss_ivfpq.index")
+        # FAISS index
+        faiss_path = os.path.join(FAISS_DIR, "faiss_flat.index")
         print(f"[NeuroScan] Loading FAISS index from {faiss_path}...")
-        self.index = faiss.read_index(os.path.join(FAISS_DIR, "faiss_flat.index"))
+        self.index = faiss.read_index(faiss_path)
         print(f"[NeuroScan] FAISS index loaded ✓  ({self.index.ntotal} vectors)")
 
+        # Metadata
         meta_path     = os.path.join(EMBEDDINGS_DIR, "metadata.csv")
         self.metadata = pd.read_csv(meta_path)
         print(f"[NeuroScan] Metadata loaded ✓  ({len(self.metadata)} rows)")
@@ -373,28 +378,35 @@ class RetrievalEngine:
 
 # ============================================================
 # FLASK APP
-# FIX: static_folder points to 'static' subfolder
 # ============================================================
 app = Flask(__name__, static_folder="static", static_url_path="/static")
 CORS(app)
 
 engine = None
-import threading
+
 
 def get_engine():
     global engine
     if engine is None:
-        engine = RetrievalEngine()
+        raise RuntimeError("Engine not ready yet, please wait...")
     return engine
 
-# Pre-load engine in background thread so port opens immediately
+
+# ── Load engine in background thread so gunicorn binds port immediately ──
 def preload_engine():
     global engine
-    print("[NeuroInsight] Pre-loading engine in background...")
-    engine = RetrievalEngine()
-    print("[NeuroInsight] Engine ready!")
+    print("[NeuroInsight] Pre-loading engine in background thread...")
+    try:
+        engine = RetrievalEngine()
+        print("[NeuroInsight] Engine ready!")
+    except Exception as e:
+        print(f"[NeuroInsight] ERROR loading engine: {e}")
+        import traceback
+        traceback.print_exc()
 
 threading.Thread(target=preload_engine, daemon=True).start()
+
+
 # ── Routes ────────────────────────────────────────────────────────────────
 
 @app.route("/")
@@ -414,20 +426,99 @@ def about():
 def contact():
     return send_from_directory(".", "contact.html")
 
-# FIX: Added missing @app.route decorator for /api/health
 @app.route("/api/health")
 def health():
+    if engine is None:
+        return jsonify({
+            "status":  "loading",
+            "message": "Model is still loading, please wait..."
+        }), 503
     try:
-        eng = get_engine()
         return jsonify({
             "status":     "ok",
             "model":      "Phase2Model (ResNet-50)",
-            "index_size": eng.index.ntotal,
-            "device":     str(eng.device),
+            "index_size": engine.index.ntotal,
+            "device":     str(engine.device),
         })
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
-# ── Run ───────────────────────────────────────────────────────────────────
+
+
+@app.route("/api/stats")
+def stats():
+    if engine is None:
+        return jsonify({"error": "Engine not ready yet"}), 503
+    try:
+        meta = engine.metadata
+        return jsonify({
+            "total_indexed": engine.index.ntotal,
+            "grade_dist":    meta["true_grade"].value_counts().to_dict(),
+            "severity_dist": meta["true_severity"].value_counts().to_dict(),
+            "size_dist":     meta["true_size"].value_counts().to_dict(),
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/predict", methods=["POST"])
+def predict():
+    if engine is None:
+        return jsonify({"error": "Model is still loading, please try again in a moment."}), 503
+
+    if "file" not in request.files:
+        return jsonify({"error": "No file uploaded."}), 400
+
+    file = request.files["file"]
+    if file.filename == "":
+        return jsonify({"error": "Empty filename"}), 400
+
+    ext = os.path.splitext(file.filename)[1].lower()
+    if ext not in {".png", ".jpg", ".jpeg", ".tiff", ".tif", ".bmp"}:
+        return jsonify({"error": f"Unsupported file type: {ext}"}), 400
+
+    image_bytes = file.read()
+    if len(image_bytes) > MAX_FILE_MB * 1024 * 1024:
+        return jsonify({"error": f"File too large (max {MAX_FILE_MB} MB)"}), 413
+
+    try:
+        result = engine.predict(image_bytes)
+        return jsonify(result)
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/report", methods=["POST"])
+def report():
+    try:
+        result = request.get_json(force=True)
+        if not result:
+            return jsonify({"error": "Send result JSON as request body"}), 400
+
+        patient_name = result.get("patient", {}).get("name", "report")
+        safe_name    = (patient_name.strip()
+                        .replace(" ", "_")
+                        .replace("/", "")
+                        .replace("\\", ""))
+        filename     = f"{safe_name}_NeuroInsight_Report.pdf"
+
+        pdf_bytes = generate_pdf_report(result)
+        return Response(
+            pdf_bytes,
+            mimetype="application/pdf",
+            headers={
+                "Content-Disposition": f"attachment; filename={filename}",
+                "Content-Length":      str(len(pdf_bytes)),
+            }
+        )
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+
+# ── Run locally ───────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
     print("=" * 60)
