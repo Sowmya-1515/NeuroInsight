@@ -1,14 +1,23 @@
-# Model files — too large for GitHub
+# Model files
 training_output/
 training_output_enhanced/
 brats_slices_224/
 faiss_index_enhanced/
-embeddings_output/
 *.pth
 *.pt
 
-# Keep faiss_index/ — small enough
-# Keep static/ — needed for frontend
+# Large data files
+embeddings_output/
+embeddings_output_enhanced/
+retrieval_output/
+retrieval_output_enhanced/
+
+# Old static folder with space
+static /
+
+# Test PDFs
+report_no_tumor.pdf
+report_tumor.pdf
 
 # Python
 __pycache__/
