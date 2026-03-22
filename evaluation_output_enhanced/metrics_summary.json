@@ -1,0 +1,44 @@
+{
+  "classification": {
+    "grade": {
+      "accuracy": 0.9996,
+      "precision": 0.9995,
+      "recall": 0.9996,
+      "f1": 0.9996
+    },
+    "severity": {
+      "accuracy": 0.9949,
+      "precision": 0.9946,
+      "recall": 0.9949,
+      "f1": 0.9947
+    },
+    "size": {
+      "accuracy": 0.9819,
+      "precision": 0.9503,
+      "recall": 0.9885,
+      "f1": 0.9684
+    },
+    "location": {
+      "accuracy": 0.9781,
+      "precision": 0.9723,
+      "recall": 0.9726,
+      "f1": 0.9725
+    }
+  },
+  "retrieval": {
+    "P@1": 0.9697,
+    "R@1": 0.0002,
+    "NDCG@1": 0.9739,
+    "P@5": 0.9444,
+    "R@5": 0.0009,
+    "NDCG@5": 0.9707,
+    "P@10": 0.9126,
+    "R@10": 0.0018,
+    "NDCG@10": 0.9655,
+    "P@20": 0.8806,
+    "R@20": 0.0034,
+    "NDCG@20": 0.9879,
+    "mAP": 0.9437
+  },
+  "n_retrieval_queries": 198
+}

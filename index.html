@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NeuroInsight | Precision MRI Analytics</title>
+<link rel="stylesheet" href="/static/style.css"/>
+<style>
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  min-height: 921px;
+  display: flex; align-items: center; overflow: hidden;
+  padding: 5rem 2.5rem;
+  background: var(--surface);
+}
+.hero-neural-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: radial-gradient(circle at 2px 2px, #4c6e99 1px, transparent 0);
+  background-size: 40px 40px;
+  opacity: 0.4;
+}
+.hero-inner {
+  max-width: 1200px; margin: 0 auto; width: 100%;
+  display: grid; grid-template-columns: 5fr 7fr;
+  gap: 3rem; align-items: center; position: relative; z-index: 1;
+}
+.hero-status-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 4px 12px; border-radius: 20px;
+  background: rgba(13,27,42,0.05); border: 1px solid #0D1B2A;
+  font-size: 10px; text-transform: uppercase; letter-spacing: .2em;
+  font-weight: 700; color: var(--navy); font-family: var(--fm);
+  margin-bottom: 2rem;
+}
+.hero-status-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--navy2);
+  animation: pulse 2s cubic-bezier(.4,0,.6,1) infinite;
+}
+h1.hero-title {
+  font-family: var(--fd);
+  font-size: clamp(2.8rem, 6vw, 4.5rem);
+  font-weight: 800; color: var(--navy3);
+  line-height: 1.1; letter-spacing: -.05em;
+  margin-bottom: 1.5rem;
+}
+h1.hero-title .blue { color: var(--navy2); }
+.hero-desc {
+  font-size: clamp(14px, 1.8vw, 18px);
+  color: var(--muted); line-height: 1.625;
+  font-weight: 300; max-width: 460px;
+  margin-bottom: 2rem; font-family: var(--fb);
+}
+.hero-actions { display: flex; flex-wrap: wrap; gap: 1rem; }
+.hero-stats {
+  display: flex; gap: 2.5rem; margin-top: 2.5rem;
+  padding-top: 2rem; border-top: 1px solid rgba(196,198,204,0.3);
+  flex-wrap: wrap;
+}
+.hstat-val { font-family: var(--fd); font-size: 1.4rem; font-weight: 800; color: var(--navy3); letter-spacing: -.03em; }
+.hstat-lbl { font-size: 10px; color: var(--muted2); margin-top: 2px; font-family: var(--fm); text-transform: uppercase; letter-spacing: .1em; }
+
+/* ── BRAIN IMAGE RIGHT ── */
+.hero-visual { position: relative; }
+.hero-visual-glow {
+  position: absolute; inset: -1rem;
+  background: rgba(219,234,254,0.5);
+  border-radius: 50%;
+  filter: blur(64px);
+  pointer-events: none;
+}
+.hero-visual-frame {
+  position: relative; z-index: 1;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--r3);
+  backdrop-filter: blur(12px);
+  padding: 8px;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,.25);
+}
+.hero-visual-frame img {
+  width: 100%; border-radius: 8px;
+  box-shadow: 0 25px 50px -12px rgba(11,11,11,0.25);
+  display: block;
+}
+.hero-diag-overlay {
+  position: absolute; top: 2rem; left: 2rem;
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(12px);
+  border-radius: var(--r2);
+  border: 1px solid rgba(255,255,255,0.2);
+  font-family: var(--fm); font-size: 10px;
+  color: var(--navy);
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,.1);
+  line-height: 1.8;
+}
+.hero-signal-bars {
+  position: absolute; bottom: 3rem; right: 3rem;
+  display: flex; gap: 4px; align-items: flex-end;
+}
+.signal-bar { width: 4px; border-radius: 2px; background: var(--teal); }
+
+/* ── PIPELINE SECTION ── */
+.pipeline-section { padding: 6rem 2.5rem; background: var(--surface); }
+.pipeline-inner { max-width: 1200px; margin: 0 auto; }
+.pipeline-steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-top: 4rem; }
+.pipeline-step {
+  padding: 2rem 1.5rem;
+  background: var(--surf-low);
+  border-radius: var(--r3);
+  transition: all .2s; cursor: default;
+}
+.pipeline-step:hover { background: var(--surf-mid); transform: translateY(-4px); }
+.step-num {
+  font-family: var(--fd); font-size: 3rem; font-weight: 900;
+  color: #4c6e99; line-height: 1;
+  margin-bottom: 1rem; transition: color .2s;
+}
+.pipeline-step:hover .step-num { color: rgba(83,32,111,0.719); }
+.step-icon { font-size: 24px; margin-bottom: 1rem; display: block; }
+.pipeline-step h3 { font-family: var(--fd); font-weight: 700; font-size: 18px; color: var(--on-surf); margin-bottom: .75rem; letter-spacing: -.02em; }
+.pipeline-step p { font-size: 13px; color: var(--muted); line-height: 1.625; font-family: var(--fb); }
+
+/* ── COGNITIVE SECTION ── */
+.cognitive-section { padding: 6rem 2.5rem; background: var(--white); }
+.cognitive-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+.cognitive-visual { position: relative; }
+.brain-circle {
+  aspect-ratio: 1; border-radius: 50%; overflow: hidden;
+  border: 8px solid var(--surface);
+  background: var(--surf-high);
+  display: flex; align-items: center; justify-content: center;
+}
+.brain-circle img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.latency-chip {
+  position: absolute; top: 0; right: -2rem;
+  padding: 1.5rem;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(12px);
+  border-radius: var(--r3);
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,.1);
+  transform: translate(3rem, 3rem);
+}
+.latency-chip .chip-label { font-family: var(--fb); font-size: 10px; color: var(--muted2); font-weight: 700; text-transform: uppercase; letter-spacing: .1em; }
+.latency-chip .chip-val { font-family: var(--fd); font-size: 1.5rem; font-weight: 900; color: var(--teal); }
+.latency-bar { margin-top: 8px; height: 4px; background: var(--surf-high); border-radius: 2px; overflow: hidden; }
+.latency-bar-fill { height: 4px; width: 75%; background: var(--teal); }
+.cognitive-list { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+.cog-item { display: flex; align-items: flex-start; gap: 1rem; }
+.cog-icon { color: var(--teal); font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+.cog-item h4 { font-family: var(--fd); font-weight: 700; font-size: 15px; color: var(--on-surf); margin-bottom: 3px; }
+.cog-item p { font-size: 13px; color: var(--muted); line-height: 1.6; font-family: var(--fb); }
+
+/* ── BENTO GRID ── */
+.bento-section { padding: 6rem 2.5rem; background: var(--surface); }
+.bento-inner { max-width: 1200px; margin: 0 auto; }
+.bento-grid { display: grid; grid-template-columns: repeat(12,1fr); gap: 1.5rem; margin-top: 4rem; }
+.bento-large {
+  grid-column: span 8; position: relative; overflow: hidden;
+  background: var(--navy); border-radius: 2rem;
+  padding: 2.5rem; display: flex; flex-direction: column; justify-content: flex-end;
+  min-height: 360px;
+}
+.bento-large img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; opacity: .4; transition: transform .7s;
+}
+.bento-large:hover img { transform: scale(1.05); }
+.bento-large-inner { position: relative; z-index: 1; color: var(--white); }
+.bento-module-tag {
+  display: inline-block; padding: 3px 12px;
+  background: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 20px; font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .15em;
+  font-family: var(--fm); margin-bottom: 1rem;
+}
+.bento-large h3 { font-family: var(--fd); font-size: 1.8rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -.03em; }
+.bento-large p { color: rgba(241,242,244,0.7); font-size: 14px; max-width: 380px; line-height: 1.65; font-family: var(--fb); }
+.bento-explore {
+  margin-top: 2rem; display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 700; color: rgb(237,241,242);
+  font-family: var(--fd); text-decoration: none; letter-spacing: -.01em;
+  transition: gap .2s;
+}
+.bento-explore:hover { gap: 16px; }
+.bento-small {
+  grid-column: span 4;
+  background: var(--sec-cont); border-radius: 2rem;
+  padding: 2rem; display: flex; flex-direction: column; justify-content: space-between;
+}
+.bento-small h3 { font-family: var(--fd); font-size: 1.4rem; font-weight: 800; color: var(--on-sec); margin-top: 1.5rem; margin-bottom: 1rem; }
+.bento-small p { font-size: 13px; color: rgba(23,78,110,0.8); line-height: 1.6; font-family: var(--fb); }
+.bento-small-icon { font-size: 2.2rem; }
+.faiss-rows { margin-top: 2rem; display: flex; flex-direction: column; gap: .6rem; }
+.faiss-row {
+  height: 2.5rem; background: rgba(255,255,255,0.4);
+  border-radius: 4px; display: flex; align-items: center;
+  padding: 0 1rem; justify-content: space-between;
+  font-size: 10px; font-weight: 700; font-family: var(--fm);
+}
+.faiss-row.dim { opacity: .5; }
+.bento-xai {
+  grid-column: span 4;
+  background: var(--surf-top); border-radius: 2rem;
+  padding: 2rem;
+}
+.bento-xai h3 { font-family: var(--fd); font-size: 1.2rem; font-weight: 800; color: var(--on-surf); margin-bottom: .5rem; }
+.bento-xai p { font-size: 13px; color: var(--muted); font-family: var(--fb); }
+.bento-xai-img { margin-top: 1.5rem; border-radius: var(--r2); overflow: hidden; background: #000; aspect-ratio: 16/9; }
+.bento-xai-img img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: var(--r2); }
+.bento-compat {
+  grid-column: span 8;
+  background: var(--surf-low); border-radius: 2rem;
+  padding: 2rem; display: flex; align-items: center; gap: 3rem;
+  border: 1px solid rgba(196,198,204,0.1);
+}
+.bento-compat h3 { font-family: var(--fd); font-size: 1.2rem; font-weight: 800; color: var(--on-surf); margin-bottom: .4rem; }
+.bento-compat p { font-size: 13px; color: var(--muted); font-family: var(--fb); }
+.compat-badges { display: flex; gap: 1rem; margin-left: auto; flex-shrink: 0; }
+.compat-badge { padding: 8px 16px; background: var(--surf-top); border-radius: var(--r2); font-size: 10px; font-weight: 700; font-family: var(--fm); color: var(--muted); }
+
+/* ── CTA ── */
+.cta-section { padding: 6rem 2.5rem; }
+.cta-inner-max { max-width: 1200px; margin: 0 auto; }
+.cta-box {
+  background: var(--navy);
+  border-radius: 2rem; padding: 6rem;
+  text-align: center; position: relative; overflow: hidden;
+}
+.cta-neural {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.04) 1px, transparent 0);
+  background-size: 40px 40px;
+}
+.cta-box h2 {
+  font-family: var(--fd); font-size: clamp(2rem,5vw,3.75rem);
+  font-weight: 800; color: #fff; letter-spacing: -.05em;
+  line-height: 1.1; max-width: 700px; margin: 0 auto 1.5rem;
+  position: relative;
+}
+.cta-box p {
+  color: rgba(255,255,255,0.6); font-size: 18px; max-width: 500px;
+  margin: 0 auto 2rem; font-family: var(--fb); font-weight: 300;
+  position: relative;
+}
+
+@media(max-width:900px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-visual { display: none; }
+  .pipeline-steps { grid-template-columns: 1fr 1fr; }
+  .cognitive-inner { grid-template-columns: 1fr; }
+  .latency-chip { display: none; }
+  .bento-large,.bento-small,.bento-xai,.bento-compat { grid-column: span 12; }
+  .bento-grid { grid-template-columns: 1fr; }
+  .cta-box { padding: 3rem 2rem; }
+}
+@media(max-width:500px) { .pipeline-steps { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 20 20" fill="none">
+        <circle cx="10" cy="10" r="8" stroke="white" stroke-width="1.5"/>
+        <path d="M6 10 Q10 4 14 10 Q10 16 6 10Z" fill="white"/>
+      </svg>
+    </div>
+    <div>
+      <span class="nav-logo-text">NeuroInsight</span>
+      <span class="nav-logo-sub">Brain Tumor Detection</span>
+    </div>
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html" class="active">Home</a>
+    <a href="analyse.html">Analysis</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-status">
+      <span class="sdot" id="sdot"></span>
+      <span id="stext">Clinical Neural Systems Active</span>
+    </div>
+    <a href="analyse.html" class="nav-cta">Start Analysis →</a>
+    <div class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-neural-bg"></div>
+  <div class="hero-inner">
+
+    <!-- Left -->
+    <div>
+      <div class="hero-status-badge">
+        <span class="hero-status-dot"></span>
+        When Every Second Counts
+      </div>
+      <h1 class="hero-title">
+        Precision MRI<br>
+        Analytics for<br>
+        <span class="blue">Clinical Insight.</span>
+      </h1>
+      <p class="hero-desc">NeuroInsight is an AI-powered neuroradiology tool that classifies MRI brain scans across grade, severity, size and location — and retrieves the most relevant clinical information.</p>
+      <div class="hero-actions">
+        <a href="analyse.html" class="btn-primary" style="font-size:15px;padding:16px 28px;">
+          Start Analysis Now
+          <span style="font-size:18px;line-height:1;">→</span>
+        </a>
+        <a href="about.html" class="btn-outline">View Documentation</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="hstat-val">128-dim</div><div class="hstat-lbl">Embeddings</div></div>
+        <div><div class="hstat-val">5 Tasks</div><div class="hstat-lbl">Multi-Task</div></div>
+        <div><div class="hstat-val">FAISS</div><div class="hstat-lbl">IVF-PQ Index</div></div>
+        <div><div class="hstat-val">&lt;200ms</div><div class="hstat-lbl">Inference</div></div>
+      </div>
+    </div>
+
+    <!-- Right — brain image -->
+    <!-- FIX: corrected broken img tag syntax, use /static/ path -->
+    <div class="hero-visual">
+      <div class="hero-visual-glow"></div>
+      <div class="hero-visual-frame">
+        <img
+          src="/static/images/mri.png"
+          alt="MRI Scanner"
+          style="width:100%;border-radius:8px;display:block;object-fit:cover;"
+        />
+        <div class="hero-signal-bars">
+          <div class="signal-bar" style="height:32px;opacity:1"></div>
+          <div class="signal-bar" style="height:24px;opacity:.6"></div>
+          <div class="signal-bar" style="height:40px;opacity:.4"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── PIPELINE ── -->
+<section class="pipeline-section">
+  <div class="pipeline-inner">
+    <div class="reveal">
+      <p class="sec-label">End-to-End Workflow</p>
+      <h2 class="sec-title">The Diagnostic Pipeline</h2>
+    </div>
+    <div class="pipeline-steps reveal">
+      <div class="pipeline-step">
+        <div class="step-num">01</div>
+        <span class="step-icon">📁</span>
+        <h3>MRI Ingestion</h3>
+        <p>Multi-format support for DICOM, PNG, and JPG with automated preprocessing and normalisation.</p>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">02</div>
+        <span class="step-icon">🧠</span>
+        <h3>ResNet-50 Inference</h3>
+        <p>Fine-tuned neural architecture for grade classification, size and tumour severity assessment across 5 tasks.</p>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">03</div>
+        <span class="step-icon">🔍</span>
+        <h3>FAISS Retrieval</h3>
+        <p>128-dimensional embedding search against indexed clinical cases for comparative analysis.</p>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">04</div>
+        <span class="step-icon">📄</span>
+        <h3>Clinical PDF Report</h3>
+        <p>Automated findings generation with integrated Grad-CAM heatmap overlays and retrieval evidence.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── COGNITIVE ARCHITECT ── -->
+<section class="cognitive-section">
+  <div class="cognitive-inner">
+    <!-- FIX: replaced absolute path with /static/ path -->
+    <div class="cognitive-visual reveal">
+      <div class="brain-circle">
+        <img
+          src="/static/images/unnamed-3.png"
+          alt="Neural Pathway Patterns"
+        />
+      </div>
+      <div class="latency-chip">
+        <div class="chip-label">Latency</div>
+        <div class="chip-val">120ms</div>
+        <div class="latency-bar"><div class="latency-bar-fill"></div></div>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <p class="sec-label">Innovation Focus</p>
+      <h2 class="sec-title" style="font-size:clamp(1.8rem,3.5vw,3rem);">The Cognitive Architect</h2>
+      <p class="sec-sub">We believe diagnostic software shouldn't just display data — it should model the clinician's intuition. Our approach prioritises human-centric visualisation over sterile, tabular interfaces.</p>
+      <div class="cognitive-list">
+        <div class="cog-item">
+          <span class="cog-icon">👁</span>
+          <div>
+            <h4>Intuitive Heatmaps</h4>
+            <p>Grad-CAM visualisation that explains "why" the model classified a region as high-risk — enabling transparent, trustworthy AI-assisted diagnosis.</p>
+          </div>
+        </div>
+        <div class="cog-item">
+          <span class="cog-icon">🔗</span>
+          <div>
+            <h4>Hybrid Retrieval Ranking</h4>
+            <p>60% embedding cosine similarity combined with 40% weighted attribute score — grade, severity, size, and location — for clinically meaningful case matching.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── BENTO GRID ── -->
+<section class="bento-section">
+  <div class="bento-inner">
+    <div class="reveal" style="text-align:center;margin-bottom:4rem;">
+      <h2 class="sec-title" style="text-align:center;">Core Diagnostic Modules</h2>
+      <p style="color:var(--muted);max-width:42rem;margin:1rem auto 0;font-family:var(--fb);font-size:15px;line-height:1.7;">High-performance tools built on deep neural networks for clinical precision.</p>
+    </div>
+
+    <div class="bento-grid reveal">
+      <!-- Large: Automated Detection -->
+      <!-- FIX: replaced absolute path with /static/ path -->
+      <div class="bento-large">
+        <img
+          src="/static/images/unnamed-2.png"
+          alt="MRI image"
+        />
+        <div class="bento-large-inner">
+          <span class="bento-module-tag">Module Alpha</span>
+          <h3>Automated Detection</h3>
+          <p>Real-time identification of sub-millimeter lesions using ResNet-50 with multi-task learning and uncertainty-weighted losses.</p>
+          <a href="analyse.html" class="bento-explore">EXPLORE CAPABILITIES <span>›</span></a>
+        </div>
+      </div>
+
+      <!-- Small: Case Retrieval -->
+      <div class="bento-small">
+        <div>
+          <div class="bento-small-icon">🔎</div>
+          <h3>Case Retrieval</h3>
+          <p>Instantly match current findings against indexed clinical cases using FAISS IVF-PQ vector similarity search.</p>
+        </div>
+        <div class="faiss-rows">
+          <div class="faiss-row">
+            <span>FAISS_VEC_001</span><span>✓</span>
+          </div>
+          <div class="faiss-row dim">
+            <span>FAISS_VEC_002</span><span>↻</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- XAI -->
+      <!-- FIX: replaced absolute path with /static/ path -->
+      <div class="bento-xai">
+        <h3>Explainable AI</h3>
+        <p>Grad-CAM visualisation for deep insight into model decision boundaries.</p>
+        <div class="bento-xai-img">
+          <img
+            src="/static/images/brain.png"
+            alt="Brain MRI with Grad-CAM overlay"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta-section">
+  <div class="cta-inner-max">
+    <div class="cta-box">
+      <div class="cta-neural"></div>
+      <h2 style="position:relative;">Empower Your Clinical<br>Decisions Today.</h2>
+      <p style="position:relative;">Join neuro-diagnostic departments utilising NeuroInsight for higher precision and faster turnaround.</p>
+      <div style="position:relative;">
+        <a href="analyse.html" class="btn-teal">Start Analysis Now</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand-name">NeuroInsight</div>
+      <div class="footer-copy">© 2026 NeuroInsight Diagnostic. Research Use Only.</div>
+    </div>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="contact.html">Contact Support</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+async function checkStatus() {
+  try {
+    const r = await fetch('/api/health', { signal: AbortSignal.timeout(3000) });
+    const d = await r.json();
+    if (d.status === 'ok') {
+      document.getElementById('sdot').className = 'sdot on';
+      document.getElementById('stext').textContent = 'Clinical Neural Systems Active';
+      return;
+    }
+  } catch(e) {}
+  document.getElementById('sdot').className = 'sdot off';
+  document.getElementById('stext').textContent = 'Backend Offline';
+}
+checkStatus(); setInterval(checkStatus, 15000);
+
+const ro = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) e.target.classList.add('visible');
+}), { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+</script>
+</body>
+</html>

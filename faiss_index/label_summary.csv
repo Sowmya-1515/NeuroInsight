@@ -1,0 +1,12 @@
+attribute,label,count,pct
+true_grade,HGG,10219,67.17
+true_grade,LGG,4994,32.83
+true_severity,high,3800,24.98
+true_severity,low,6088,40.02
+true_severity,medium,5325,35.0
+true_size,large,214,1.41
+true_size,medium,4557,29.95
+true_size,small,10442,68.64
+true_location,bilateral,3043,20.0
+true_location,left,5293,34.79
+true_location,right,6877,45.2

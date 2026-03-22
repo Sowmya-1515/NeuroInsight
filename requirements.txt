@@ -1,0 +1,11 @@
+flask
+flask-cors
+torch
+torchvision
+faiss-cpu
+pillow
+numpy
+pandas
+reportlab
+matplotlib
+gunicorn

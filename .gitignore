@@ -1,0 +1,25 @@
+# Model files — too large for GitHub
+training_output/
+training_output_enhanced/
+brats_slices_224/
+faiss_index_enhanced/
+embeddings_output/
+*.pth
+*.pt
+
+# Keep faiss_index/ — small enough
+# Keep static/ — needed for frontend
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+venv/
+.venv/
+
+# Mac
+.DS_Store
+
+# Logs
+*.log

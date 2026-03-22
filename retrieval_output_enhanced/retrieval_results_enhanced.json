@@ -1,0 +1,1268 @@
+[
+  {
+    "query": {
+      "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_020509.png",
+      "diagnosis": {
+        "grade": "HGG",
+        "severity": "low",
+        "size": "small",
+        "location": "right"
+      },
+      "confidence": {
+        "grade": 100.0,
+        "severity": 95.7,
+        "size": 99.8,
+        "location": 99.9
+      }
+    },
+    "results": [
+      {
+        "rank": 1,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_021994.png",
+        "similarity_pct": 100.0,
+        "embedding_sim": 100.0,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "low",
+          "size": "small",
+          "location": "right"
+        }
+      },
+      {
+        "rank": 2,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_004893.png",
+        "similarity_pct": 100.0,
+        "embedding_sim": 100.0,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "low",
+          "size": "small",
+          "location": "right"
+        }
+      },
+      {
+        "rank": 3,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_002140.png",
+        "similarity_pct": 100.0,
+        "embedding_sim": 100.0,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "low",
+          "size": "small",
+          "location": "right"
+        }
+      },
+      {
+        "rank": 4,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_018221.png",
+        "similarity_pct": 100.0,
+        "embedding_sim": 99.9,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "low",
+          "size": "small",
+          "location": "right"
+        }
+      },
+      {
+        "rank": 5,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_017098.png",
+        "similarity_pct": 100.0,
+        "embedding_sim": 99.9,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "low",
+          "size": "small",
+          "location": "right"
+        }
+      },
+      {
+        "rank": 6,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_003625.png",
+        "similarity_pct": 100.0,
+        "embedding_sim": 99.9,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "low",
+          "size": "small",
+          "location": "right"
+        }
+      },
+      {
+        "rank": 7,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_007870.png",
+        "similarity_pct": 100.0,
+        "embedding_sim": 99.9,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "low",
+          "size": "small",
+          "location": "right"
+        }
+      },
+      {
+        "rank": 8,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_007797.png",
+        "similarity_pct": 100.0,
+        "embedding_sim": 99.9,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "low",
+          "size": "small",
+          "location": "right"
+        }
+      },
+      {
+        "rank": 9,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_000413.png",
+        "similarity_pct": 100.0,
+        "embedding_sim": 99.9,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "low",
+          "size": "small",
+          "location": "right"
+        }
+      },
+      {
+        "rank": 10,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_006843.png",
+        "similarity_pct": 100.0,
+        "embedding_sim": 99.9,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "low",
+          "size": "small",
+          "location": "right"
+        }
+      }
+    ],
+    "total_found": 50,
+    "returned": 10
+  },
+  {
+    "query": {
+      "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_003855.png",
+      "diagnosis": {
+        "grade": "HGG",
+        "severity": "medium",
+        "size": "small",
+        "location": "bilateral"
+      },
+      "confidence": {
+        "grade": 99.9,
+        "severity": 96.3,
+        "size": 100.0,
+        "location": 96.2
+      }
+    },
+    "results": [
+      {
+        "rank": 1,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_002379.png",
+        "similarity_pct": 100.0,
+        "embedding_sim": 99.9,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "medium",
+          "size": "small",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 2,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_023776.png",
+        "similarity_pct": 100.0,
+        "embedding_sim": 99.9,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "medium",
+          "size": "small",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 3,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_020937.png",
+        "similarity_pct": 100.0,
+        "embedding_sim": 99.9,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "medium",
+          "size": "small",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 4,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_019303.png",
+        "similarity_pct": 99.9,
+        "embedding_sim": 99.9,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "medium",
+          "size": "small",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 5,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_022406.png",
+        "similarity_pct": 99.9,
+        "embedding_sim": 99.8,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "medium",
+          "size": "small",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 6,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_018201.png",
+        "similarity_pct": 99.8,
+        "embedding_sim": 99.7,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "medium",
+          "size": "small",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 7,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_010307.png",
+        "similarity_pct": 99.8,
+        "embedding_sim": 99.7,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "medium",
+          "size": "small",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 8,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_008868.png",
+        "similarity_pct": 99.8,
+        "embedding_sim": 99.7,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "medium",
+          "size": "small",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 9,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_013475.png",
+        "similarity_pct": 99.8,
+        "embedding_sim": 99.6,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "medium",
+          "size": "small",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 10,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_018423.png",
+        "similarity_pct": 99.8,
+        "embedding_sim": 99.6,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "medium",
+          "size": "small",
+          "location": "bilateral"
+        }
+      }
+    ],
+    "total_found": 50,
+    "returned": 10
+  },
+  {
+    "query": {
+      "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_006694.png",
+      "diagnosis": {
+        "grade": "HGG",
+        "severity": "high",
+        "size": "small",
+        "location": "right"
+      },
+      "confidence": {
+        "grade": 100.0,
+        "severity": 96.5,
+        "size": 100.0,
+        "location": 99.7
+      }
+    },
+    "results": [
+      {
+        "rank": 1,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_011307.png",
+        "similarity_pct": 100.0,
+        "embedding_sim": 99.9,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "high",
+          "size": "small",
+          "location": "right"
+        }
+      },
+      {
+        "rank": 2,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_014403.png",
+        "similarity_pct": 99.9,
+        "embedding_sim": 99.9,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "high",
+          "size": "small",
+          "location": "right"
+        }
+      },
+      {
+        "rank": 3,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_008088.png",
+        "similarity_pct": 99.9,
+        "embedding_sim": 99.9,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "high",
+          "size": "small",
+          "location": "right"
+        }
+      },
+      {
+        "rank": 4,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_009627.png",
+        "similarity_pct": 99.9,
+        "embedding_sim": 99.8,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "high",
+          "size": "small",
+          "location": "right"
+        }
+      },
+      {
+        "rank": 5,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_015992.png",
+        "similarity_pct": 99.9,
+        "embedding_sim": 99.8,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "high",
+          "size": "small",
+          "location": "right"
+        }
+      },
+      {
+        "rank": 6,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_017318.png",
+        "similarity_pct": 99.8,
+        "embedding_sim": 99.6,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "high",
+          "size": "small",
+          "location": "right"
+        }
+      },
+      {
+        "rank": 7,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_011282.png",
+        "similarity_pct": 99.8,
+        "embedding_sim": 99.6,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "high",
+          "size": "small",
+          "location": "right"
+        }
+      },
+      {
+        "rank": 8,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_012563.png",
+        "similarity_pct": 99.7,
+        "embedding_sim": 99.6,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "high",
+          "size": "small",
+          "location": "right"
+        }
+      },
+      {
+        "rank": 9,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_023836.png",
+        "similarity_pct": 99.7,
+        "embedding_sim": 99.6,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "high",
+          "size": "small",
+          "location": "right"
+        }
+      },
+      {
+        "rank": 10,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_012843.png",
+        "similarity_pct": 99.7,
+        "embedding_sim": 99.6,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "high",
+          "size": "small",
+          "location": "right"
+        }
+      }
+    ],
+    "total_found": 50,
+    "returned": 10
+  },
+  {
+    "query": {
+      "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_009011.png",
+      "diagnosis": {
+        "grade": "LGG",
+        "severity": "low",
+        "size": "medium",
+        "location": "left"
+      },
+      "confidence": {
+        "grade": 100.0,
+        "severity": 99.0,
+        "size": 96.4,
+        "location": 99.9
+      }
+    },
+    "results": [
+      {
+        "rank": 1,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_010561.png",
+        "similarity_pct": 99.4,
+        "embedding_sim": 99.1,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "low",
+          "size": "medium",
+          "location": "left"
+        }
+      },
+      {
+        "rank": 2,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_014046.png",
+        "similarity_pct": 95.7,
+        "embedding_sim": 99.5,
+        "attribute_sim": 90.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 50.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "low",
+          "size": "small",
+          "location": "left"
+        }
+      },
+      {
+        "rank": 3,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_001693.png",
+        "similarity_pct": 93.5,
+        "embedding_sim": 99.2,
+        "attribute_sim": 85.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 50.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "medium",
+          "size": "medium",
+          "location": "left"
+        }
+      },
+      {
+        "rank": 4,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_020399.png",
+        "similarity_pct": 93.5,
+        "embedding_sim": 99.2,
+        "attribute_sim": 85.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 50.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "medium",
+          "size": "medium",
+          "location": "left"
+        }
+      },
+      {
+        "rank": 5,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_006121.png",
+        "similarity_pct": 87.4,
+        "embedding_sim": 99.0,
+        "attribute_sim": 70.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 0.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "high",
+          "size": "medium",
+          "location": "left"
+        }
+      },
+      {
+        "rank": 6,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_004035.png",
+        "similarity_pct": 87.4,
+        "embedding_sim": 98.9,
+        "attribute_sim": 70.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 0.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "high",
+          "size": "medium",
+          "location": "left"
+        }
+      },
+      {
+        "rank": 7,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_022466.png",
+        "similarity_pct": 85.5,
+        "embedding_sim": 99.2,
+        "attribute_sim": 65.0,
+        "score_breakdown": {
+          "grade": 0.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "low",
+          "size": "medium",
+          "location": "left"
+        }
+      },
+      {
+        "rank": 8,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_017115.png",
+        "similarity_pct": 85.3,
+        "embedding_sim": 98.9,
+        "attribute_sim": 65.0,
+        "score_breakdown": {
+          "grade": 0.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "low",
+          "size": "medium",
+          "location": "left"
+        }
+      },
+      {
+        "rank": 9,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_002354.png",
+        "similarity_pct": 83.4,
+        "embedding_sim": 99.1,
+        "attribute_sim": 60.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 0.0,
+          "size": 50.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "high",
+          "size": "small",
+          "location": "left"
+        }
+      },
+      {
+        "rank": 10,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_003637.png",
+        "similarity_pct": 81.4,
+        "embedding_sim": 99.0,
+        "attribute_sim": 55.0,
+        "score_breakdown": {
+          "grade": 0.0,
+          "severity": 100.0,
+          "size": 50.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "HGG",
+          "severity": "low",
+          "size": "small",
+          "location": "left"
+        }
+      }
+    ],
+    "total_found": 50,
+    "returned": 10
+  },
+  {
+    "query": {
+      "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_000521.png",
+      "diagnosis": {
+        "grade": "LGG",
+        "severity": "medium",
+        "size": "medium",
+        "location": "bilateral"
+      },
+      "confidence": {
+        "grade": 100.0,
+        "severity": 97.9,
+        "size": 100.0,
+        "location": 100.0
+      }
+    },
+    "results": [
+      {
+        "rank": 1,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_005011.png",
+        "similarity_pct": 99.9,
+        "embedding_sim": 99.9,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "medium",
+          "size": "medium",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 2,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_023545.png",
+        "similarity_pct": 99.9,
+        "embedding_sim": 99.8,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "medium",
+          "size": "medium",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 3,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_002163.png",
+        "similarity_pct": 99.9,
+        "embedding_sim": 99.7,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "medium",
+          "size": "medium",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 4,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_019088.png",
+        "similarity_pct": 99.8,
+        "embedding_sim": 99.7,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "medium",
+          "size": "medium",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 5,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_013630.png",
+        "similarity_pct": 99.7,
+        "embedding_sim": 99.5,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "medium",
+          "size": "medium",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 6,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_018379.png",
+        "similarity_pct": 99.6,
+        "embedding_sim": 99.4,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "medium",
+          "size": "medium",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 7,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_017313.png",
+        "similarity_pct": 99.5,
+        "embedding_sim": 99.2,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "medium",
+          "size": "medium",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 8,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_010798.png",
+        "similarity_pct": 99.5,
+        "embedding_sim": 99.2,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "medium",
+          "size": "medium",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 9,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_021288.png",
+        "similarity_pct": 99.4,
+        "embedding_sim": 99.1,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "medium",
+          "size": "medium",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 10,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_010778.png",
+        "similarity_pct": 93.8,
+        "embedding_sim": 99.6,
+        "attribute_sim": 85.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 50.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "high",
+          "size": "medium",
+          "location": "bilateral"
+        }
+      }
+    ],
+    "total_found": 50,
+    "returned": 10
+  },
+  {
+    "query": {
+      "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_020305.png",
+      "diagnosis": {
+        "grade": "LGG",
+        "severity": "high",
+        "size": "medium",
+        "location": "bilateral"
+      },
+      "confidence": {
+        "grade": 100.0,
+        "severity": 99.0,
+        "size": 100.0,
+        "location": 100.0
+      }
+    },
+    "results": [
+      {
+        "rank": 1,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_012568.png",
+        "similarity_pct": 99.9,
+        "embedding_sim": 99.9,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "high",
+          "size": "medium",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 2,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_014378.png",
+        "similarity_pct": 99.9,
+        "embedding_sim": 99.8,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "high",
+          "size": "medium",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 3,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_014637.png",
+        "similarity_pct": 99.9,
+        "embedding_sim": 99.8,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "high",
+          "size": "medium",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 4,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_011456.png",
+        "similarity_pct": 99.9,
+        "embedding_sim": 99.8,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "high",
+          "size": "medium",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 5,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_015967.png",
+        "similarity_pct": 99.9,
+        "embedding_sim": 99.8,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "high",
+          "size": "medium",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 6,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_011286.png",
+        "similarity_pct": 99.9,
+        "embedding_sim": 99.8,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "high",
+          "size": "medium",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 7,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_021789.png",
+        "similarity_pct": 99.9,
+        "embedding_sim": 99.8,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "high",
+          "size": "medium",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 8,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_009608.png",
+        "similarity_pct": 99.9,
+        "embedding_sim": 99.8,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "high",
+          "size": "medium",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 9,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_008063.png",
+        "similarity_pct": 99.9,
+        "embedding_sim": 99.8,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "high",
+          "size": "medium",
+          "location": "bilateral"
+        }
+      },
+      {
+        "rank": 10,
+        "image_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/brats_slices_224/slice_006852.png",
+        "similarity_pct": 99.9,
+        "embedding_sim": 99.8,
+        "attribute_sim": 100.0,
+        "score_breakdown": {
+          "grade": 100.0,
+          "severity": 100.0,
+          "size": 100.0,
+          "location": 100.0
+        },
+        "diagnosis": {
+          "grade": "LGG",
+          "severity": "high",
+          "size": "medium",
+          "location": "bilateral"
+        }
+      }
+    ],
+    "total_found": 50,
+    "returned": 10
+  }
+]

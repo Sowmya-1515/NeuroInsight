@@ -1,0 +1,31 @@
+{
+  "embed_dim": 128,
+  "n_samples": 15213,
+  "n_clusters": 123,
+  "n_subvectors": 16,
+  "bits_per_sub": 8,
+  "nprobe": 10,
+  "index_type": "IndexIVFPQ",
+  "distance_metric": "L2 (on L2-normalized vecs = cosine)",
+  "sanity_check": {
+    "query_idx": 1107,
+    "flat_results": [
+      983,
+      12228,
+      313,
+      14626,
+      7528
+    ],
+    "ivfpq_results": [
+      313,
+      12228,
+      983,
+      1844,
+      9286
+    ],
+    "overlap": 3
+  },
+  "flat_index_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/Phase2/faiss_index/faiss_flat.index",
+  "ivfpq_index_path": "/Users/sowmyaalamuri/Desktop/Capstone_project/Phase2/faiss_index/faiss_ivfpq.index",
+  "metadata_csv": "/Users/sowmyaalamuri/Desktop/Capstone_project/Phase2/embeddings_output/metadata.csv"
+}

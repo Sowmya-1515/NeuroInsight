@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>About — NeuroInsight</title>
+<link rel="stylesheet" href="/static/style.css"/>
+<style>
+/* ── PAGE-SPECIFIC: about.html only ── */
+.page-hero { background: linear-gradient(135deg,var(--navy) 0%,var(--navy3) 100%); padding: 3.5rem 2.5rem 3rem; }
+.page-hero-inner { max-width:1200px; margin:0 auto; }
+.page-hero h1 { font-family:var(--fd); font-size:clamp(1.8rem,3.5vw,2.8rem); font-weight:800; color:#fff; margin:.8rem 0 .6rem; letter-spacing:-.02em; }
+.page-hero p { font-size:14px; color:#fff; max-width:540px; line-height:1.7; }
+.breadcrumb { display:flex; align-items:center; gap:8px; font-size:12px; font-family:var(--fm); color:#fff; margin-bottom:.8rem; }
+.breadcrumb a { color:var(--white); text-decoration:none; } .breadcrumb a:hover{color:var(--accent);}
+.breadcrumb span { color:var(--white); }
+.tag { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.2); color: #fff; }
+.tag-dot { background: var(--teal); }
+.analyse-wrap { max-width:1200px; margin:0 auto; padding:2.5rem 2.5rem; }
+.analyse-grid { display:grid; grid-template-columns:400px 1fr; gap:1.5rem; align-items:start; }
+@media(max-width:900px){ .analyse-grid{grid-template-columns:1fr;} }
+@media(max-width:600px){ .analyse-wrap{padding:1.5rem;} }
+
+.left-col { display:flex; flex-direction:column; gap:1.2rem; }
+.right-col{ display:flex; flex-direction:column; gap:1.2rem; }
+
+/* Pipeline */
+.about-section { max-width: 1200px; margin: 0 auto; padding: 4rem 2.5rem; }
+.about-section + .about-section { padding-top: 0; }
+@media(max-width:600px){ .about-section { padding-left: 1.5rem; padding-right: 1.5rem; } }
+
+.sec-label-a { font-size: 11px; font-family: var(--fm); color: var(--teal); text-transform: uppercase; letter-spacing: .2em; margin-bottom: .4rem; font-weight: 700; }
+.sec-title-a { font-family: var(--fd); font-size: clamp(1.4rem,2.5vw,1.9rem); font-weight: 800; color: var(--navy); letter-spacing: -.03em; margin-bottom: .5rem; }
+.sec-sub-a   { font-size: 14px; color: var(--muted); line-height: 1.7; max-width: 580px; font-family: var(--fb); margin-bottom: 2rem; }
+
+/* Pipeline strip */
+.pipeline { display: flex; align-items: stretch; gap: 0; overflow-x: auto; margin-top: 2rem; border: 1px solid var(--surf-high); border-radius: var(--r3); overflow: hidden; }
+.pipe-step { flex: 1; min-width: 160px; background: var(--white); border-right: 1px solid var(--surf-high); padding: 1.5rem 1.2rem; text-align: center; position: relative; transition: background .2s; }
+.pipe-step:last-child { border-right: none; }
+.pipe-step:hover { background: var(--surf-low); }
+.pipe-ico { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto .8rem; }
+.pipe-step h4 { font-family: var(--fd); font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: .4rem; letter-spacing: -.01em; }
+.pipe-step p  { font-size: 11px; color: var(--muted); line-height: 1.55; font-family: var(--fm); }
+.pipe-tag { display: inline-block; background: var(--surf-low); border: 1px solid var(--surf-high); color: var(--teal); font-size: 10px; padding: 2px 8px; border-radius: 4px; margin-top: .5rem; font-family: var(--fm); font-weight: 700; letter-spacing: .05em; }
+@media(max-width:860px){
+  .pipeline { flex-wrap: wrap; border-radius: var(--r2); }
+  .pipe-step { min-width: calc(50% - 0px); border-right: 1px solid var(--surf-high); border-bottom: 1px solid var(--surf-high); }
+}
+@media(max-width:500px){ .pipe-step { min-width: 100%; } }
+
+/* Model grid */
+.model-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+@media(max-width:860px){ .model-grid { grid-template-columns: 1fr; } }
+
+.model-card { background: var(--white); border: 1px solid var(--surf-high); border-radius: var(--r3); padding: 1.8rem; box-shadow: var(--sh); transition: box-shadow .2s, transform .2s; }
+.model-card:hover { box-shadow: var(--sh2); transform: translateY(-2px); }
+.model-badge { display: inline-flex; background: rgba(0,144,173,.08); border: 1px solid rgba(0,144,173,.2); color: var(--teal); font-size: 10px; padding: 3px 10px; border-radius: 4px; font-family: var(--fm); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: .8rem; }
+.model-card h3 { font-family: var(--fd); font-size: 16px; font-weight: 800; color: var(--navy); margin-bottom: .5rem; letter-spacing: -.02em; }
+.model-card p  { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; font-family: var(--fb); }
+.model-card ul { list-style: none; display: flex; flex-direction: column; gap: .35rem; }
+.model-card ul li { font-size: 12px; color: var(--on-svar); padding-left: 1.2rem; position: relative; font-family: var(--fm); line-height: 1.5; }
+.model-card ul li::before { content: '→'; position: absolute; left: 0; color: var(--teal); font-size: 11px; top: 1px; }
+
+/* Metrics */
+.metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+@media(max-width:860px){ .metrics-grid { grid-template-columns: repeat(2, 1fr); } }
+@media(max-width:480px){ .metrics-grid { grid-template-columns: 1fr 1fr; } }
+
+.metric-card { background: var(--white); border: 1px solid var(--surf-high); border-radius: var(--r2); padding: 1.4rem; text-align: center; box-shadow: var(--sh); transition: all .2s; }
+.metric-card:hover { border-color: var(--teal); transform: translateY(-2px); box-shadow: var(--sh2); }
+.metric-val { font-family: var(--fd); font-size: 2rem; font-weight: 800; color: var(--navy); letter-spacing: -.03em; }
+.metric-lbl { font-size: 12px; color: var(--muted); margin-top: .3rem; font-family: var(--fm); font-weight: 600; }
+.metric-sub { font-size: 11px; color: var(--muted2); margin-top: .2rem; font-family: var(--fb); }
+
+/* Dataset */
+.dataset-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2rem; }
+@media(max-width:860px){ .dataset-row { grid-template-columns: 1fr; } }
+
+.ds-card { background: var(--white); border: 1px solid var(--surf-high); border-radius: var(--r2); padding: 1.6rem; box-shadow: var(--sh); }
+.ds-card h3 { font-family: var(--fd); font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: .6rem; letter-spacing: -.02em; }
+.ds-card p  { font-size: 13px; color: var(--muted); line-height: 1.65; font-family: var(--fb); }
+
+/* divider between sections */
+.section-divider { border: none; border-top: 1px solid var(--surf-high); margin: 0 2.5rem; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 20 20" fill="none">
+        <circle cx="10" cy="10" r="8" stroke="white" stroke-width="1.5"/>
+        <path d="M6 10 Q10 4 14 10 Q10 16 6 10Z" fill="white"/>
+      </svg>
+    </div>
+    <div>
+      <span class="nav-logo-text">NeuroInsight</span>
+      <span class="nav-logo-sub">Brain Tumor Detection</span>
+    </div>
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html">Home</a>
+    <a href="analyse.html">Analyse</a>
+    <a href="about.html" class="active">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <div class="nav-status"><span class="sdot" id="sdot"></span><span id="stext">checking…</span></div>
+    <a href="analyse.html" class="nav-cta">Try Now →</a>
+    <div class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO — uses .page-hero from style.css -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span>About</span>
+    </div>
+    <div class="tag" style="margin-bottom:.8rem;"><span class="tag-dot"></span>System overview</div>
+    <h1>About NeuroInsight</h1>
+    <p>An AI-assisted neuroradiology pipeline combining multi-task deep learning, metric learning, and approximate nearest-neighbour retrieval for brain tumour analysis.</p>
+  </div>
+</div>
+
+<!-- PIPELINE -->
+<div class="about-section reveal">
+  <div class="sec-label-a">Architecture</div>
+  <div class="sec-title-a">End-to-end pipeline</div>
+  <p class="sec-sub-a">NeuroInsight processes an MRI slice through a five-stage automated pipeline.</p>
+
+  <div class="pipeline">
+    <div class="pipe-step">
+      <div class="pipe-ico" style="background:rgba(0,144,173,.1);">
+        <svg width="22" height="22" fill="none" stroke="var(--teal)" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      </div>
+      <h4>MRI Input</h4>
+      <p>PNG / JPG / TIFF<br>Resize 160×160<br>ImageNet normalise</p>
+      <span class="pipe-tag">Preprocessing</span>
+    </div>
+    <div class="pipe-step">
+      <div class="pipe-ico" style="background:rgba(34,70,127,.1);">
+        <svg width="22" height="22" fill="none" stroke="var(--navy2)" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      </div>
+      <h4>ResNet-50 Encoder</h4>
+      <p>ImageNet pretrained<br>Fine-tuned on BraTS<br>2048-dim features</p>
+      <span class="pipe-tag">Backbone</span>
+    </div>
+    <div class="pipe-step">
+      <div class="pipe-ico" style="background:rgba(124,58,255,.1);">
+        <svg width="22" height="22" fill="none" stroke="#7c3aed" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <h4>Multi-Task Heads</h4>
+      <p>Grade · Severity<br>Size · Location<br>Tumor presence</p>
+      <span class="pipe-tag">5 outputs</span>
+    </div>
+    <div class="pipe-step">
+      <div class="pipe-ico" style="background:rgba(239,159,39,.1);">
+        <svg width="22" height="22" fill="none" stroke="#c2770a" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <h4>FAISS Search</h4>
+      <p>128-dim embedding<br>IVF-PQ index<br>Top-50 candidates</p>
+      <span class="pipe-tag">Retrieval</span>
+    </div>
+    <div class="pipe-step">
+      <div class="pipe-ico" style="background:rgba(186,26,26,.08);">
+        <svg width="22" height="22" fill="none" stroke="#ba1a1a" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <h4>PDF Report</h4>
+      <p>Clinical findings<br>Grad-CAM overlay<br>Retrieval evidence</p>
+      <span class="pipe-tag">Output</span>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider"/>
+
+<!-- MODEL DETAILS -->
+<div class="about-section reveal">
+  <div class="sec-label-a">Model</div>
+  <div class="sec-title-a">Technical details</div>
+  <p class="sec-sub-a">Built on ResNet-50 with a custom multi-task learning framework.</p>
+  <div class="model-grid">
+    <div class="model-card">
+      <span class="model-badge">Backbone</span>
+      <h3>ResNet-50 Encoder</h3>
+      <p>ImageNet-pretrained backbone with all layers unfrozen after the first 3 warmup epochs. Extracts 2048-dimensional feature vectors from 160×160 MRI slices.</p>
+      <ul>
+        <li>Input: 160×160×3 RGB</li>
+        <li>Backbone: ResNet-50 (pretrained)</li>
+        <li>Feature dim: 2048</li>
+        <li>Warmup: 3 epochs frozen</li>
+        <li>Dropout: 0.3 throughout</li>
+      </ul>
+    </div>
+    <div class="model-card">
+      <span class="model-badge">Projection Head</span>
+      <h3>128-dim Embedding</h3>
+      <p>A 3-layer projection head maps the 2048-dim backbone output to a 128-dim L2-normalised embedding space used for FAISS retrieval.</p>
+      <ul>
+        <li>Linear(2048 → 512) + ReLU + BN</li>
+        <li>Linear(512 → 128)</li>
+        <li>L2 normalisation</li>
+        <li>Loss: SupCon + NTXent</li>
+        <li>Temperature: 0.07</li>
+      </ul>
+    </div>
+    <div class="model-card">
+      <span class="model-badge">Classification Heads</span>
+      <h3>5 Parallel Heads</h3>
+      <p>Five independent classification heads operating on the 2048-dim feature vector. Severity uses Focal Loss to handle class imbalance.</p>
+      <ul>
+        <li>Grade: Linear → ReLU → Dropout → Linear(2)</li>
+        <li>Severity: Focal Loss, γ=2.0, 3 classes</li>
+        <li>Size: 3 classes (small/medium/large)</li>
+        <li>Location: 3 classes (left/right/bilateral)</li>
+        <li>Tumor: 2 classes (present/absent)</li>
+      </ul>
+    </div>
+    <div class="model-card">
+      <span class="model-badge">Loss Function</span>
+      <h3>Multi-Task Loss</h3>
+      <p>Uncertainty-weighted multi-task loss (Kendall et al. 2018). Learnable log-variance parameters automatically balance all task losses during training.</p>
+      <ul>
+        <li>SupCon: supervised contrastive</li>
+        <li>NTXent: noise-contrastive estimation</li>
+        <li>CE losses per classification head</li>
+        <li>Focal loss for severity</li>
+        <li>Uncertainty weighting (learned σ)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider"/>
+
+<!-- METRICS -->
+<div class="about-section reveal">
+  <div class="sec-label-a">Performance</div>
+  <div class="sec-title-a">Model metrics</div>
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-val">128</div>
+      <div class="metric-lbl">Embedding Dimensions</div>
+      <div class="metric-sub">L2-normalised</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">160px</div>
+      <div class="metric-lbl">Input Resolution</div>
+      <div class="metric-sub">Resized from DICOM</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">IVF-PQ</div>
+      <div class="metric-lbl">FAISS Index Type</div>
+      <div class="metric-sub">Approx. nearest neighbour</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">15</div>
+      <div class="metric-lbl">Training Epochs</div>
+      <div class="metric-sub">With LR scheduler</div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider"/>
+
+<!-- DATASET -->
+<div class="about-section reveal">
+  <div class="sec-label-a">Dataset</div>
+  <div class="sec-title-a">BraTS 2020</div>
+  <p class="sec-sub-a">Trained and evaluated on the Brain Tumour Segmentation (BraTS) 2020 challenge dataset.</p>
+  <div class="dataset-row">
+    <div class="ds-card">
+      <h3>Dataset Overview</h3>
+      <p>BraTS 2020 contains multi-institutional pre-operative MRI scans of glioma patients, including HGG (high-grade) and LGG (low-grade) cases. Axial slices were extracted at 224×224 and resized to 160×160 for training.</p>
+    </div>
+    <div class="ds-card">
+      <h3>Label Construction</h3>
+      <p>Rich composite labels were derived from tumour metadata: size bins (small/medium/large), laterality (left/right/bilateral), slice position, subregion presence (necrosis/edema), and severity scores from tumour area normalisation.</p>
+    </div>
+    <div class="ds-card">
+      <h3>Training Setup</h3>
+      <p>Batch size 32, Adam optimiser with differential learning rates (backbone 10× lower than heads). Augmentation: horizontal flip, vertical flip, ±15° rotation, brightness/contrast jitter. Weighted sampler for class balance.</p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER — uses .site-footer from style.css -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand-name">NeuroInsight</div>
+      <div class="footer-copy">© 2026 NeuroInsight Diagnostic. Research Use Only.</div>
+    </div>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="contact.html">Contact Support</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+async function checkStatus() {
+  try {
+    const r = await fetch('http://localhost:8002/api/health', { signal: AbortSignal.timeout(3000) });
+    const d = await r.json();
+    if (d.status === 'ok') {
+      document.getElementById('sdot').className = 'sdot on';
+      document.getElementById('stext').textContent = `online · ${(d.index_size||0).toLocaleString()} vec`;
+      return;
+    }
+  } catch(e) {}
+  document.getElementById('sdot').className = 'sdot off';
+  document.getElementById('stext').textContent = 'offline';
+}
+checkStatus(); setInterval(checkStatus, 15000);
+
+const ro = new IntersectionObserver(entries => entries.forEach(e => {
+  if (e.isIntersecting) e.target.classList.add('visible');
+}), { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+</script>
+</body>
+</html>

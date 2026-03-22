@@ -1,0 +1,5 @@
+attribute,accuracy,precision,recall,f1
+grade,0.998,0.9975,0.9979,0.9977
+severity,0.9669,0.9673,0.968,0.9674
+size,0.9933,0.9908,0.977,0.9837
+location,0.989,0.9867,0.986,0.9863

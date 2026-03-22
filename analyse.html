@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Analyse — NeuroInsight</title>
+<link rel="stylesheet" href="/static/style.css"/>
+<style>
+/* ── PAGE HERO override → navy gradient ── */
+.page-hero { background: linear-gradient(135deg, var(--navy) 0%, var(--navy3) 100%); }
+.page-hero h1 { color: #fff; }
+.page-hero p  { color: rgba(255,255,255,.75); }
+.breadcrumb, .breadcrumb a, .breadcrumb span { color: rgba(255,255,255,.6); }
+.breadcrumb a:hover { color: var(--teal); }
+.tag { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.2); color: #fff; }
+.tag-dot { background: var(--teal); }
+
+/* ── Layout ── */
+.analyse-wrap { max-width: 1200px; margin: 0 auto; padding: 2.5rem; }
+@media(max-width:600px){ .analyse-wrap { padding: 1.5rem; } }
+.analyse-grid { display: grid; grid-template-columns: 400px 1fr; gap: 1.5rem; align-items: start; }
+@media(max-width:900px){ .analyse-grid { grid-template-columns: 1fr; } }
+.left-col  { display: flex; flex-direction: column; gap: 1.2rem; }
+.right-col { display: flex; flex-direction: column; gap: 1.2rem; }
+
+/* ── Diag grid ── */
+.diag-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; margin-bottom: 1rem; }
+@media(max-width:500px){ .diag-grid2 { grid-template-columns: 1fr; } }
+
+/* ════════════════════════════════════════
+   PATIENT DETAILS MODAL
+   ════════════════════════════════════════ */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,26,64,.55);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s ease;
+  padding: 1rem;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+
+.modal {
+  background: var(--white); border-radius: var(--r3);
+  width: 100%; max-width: 520px;
+  box-shadow: 0 24px 60px rgba(0,26,64,.25);
+  transform: translateY(18px) scale(.98);
+  transition: transform .28s cubic-bezier(.4,0,.2,1);
+  overflow: hidden;
+}
+.modal-overlay.open .modal { transform: translateY(0) scale(1); }
+
+.modal-header {
+  background: linear-gradient(135deg, var(--navy), var(--navy2));
+  padding: 1.4rem 1.6rem;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem;
+}
+.modal-header-left h2 {
+  font-family: var(--fd); font-size: 16px; font-weight: 800;
+  color: #fff; letter-spacing: -.02em; margin-bottom: 3px;
+}
+.modal-header-left p { font-size: 12px; color: rgba(255,255,255,.6); font-family: var(--fm); }
+.modal-close {
+  background: rgba(255,255,255,.12); border: none; color: rgba(255,255,255,.8);
+  width: 30px; height: 30px; border-radius: 8px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0; transition: background .15s;
+}
+.modal-close:hover { background: rgba(255,255,255,.22); }
+
+.modal-body { padding: 1.6rem; }
+
+/* Step indicator */
+.modal-steps {
+  display: flex; align-items: center; gap: 0; margin-bottom: 1.6rem;
+}
+.modal-step {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; font-family: var(--fm); font-weight: 700;
+  color: var(--muted2); text-transform: uppercase; letter-spacing: .05em;
+}
+.modal-step.active { color: var(--navy); }
+.modal-step.done   { color: var(--teal); }
+.step-dot {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--surf-high); display: flex; align-items: center;
+  justify-content: center; font-size: 10px; font-weight: 800;
+  color: var(--muted2); flex-shrink: 0; transition: all .2s;
+}
+.modal-step.active .step-dot { background: var(--navy); color: #fff; }
+.modal-step.done   .step-dot { background: var(--teal); color: #fff; }
+.step-line { flex: 1; height: 1px; background: var(--surf-high); margin: 0 8px; }
+
+/* Form fields inside modal */
+.mfg { margin-bottom: 1rem; }
+.mfg label {
+  display: block; font-size: 11px; font-weight: 700; color: var(--muted2);
+  text-transform: uppercase; letter-spacing: .1em; margin-bottom: .35rem;
+  font-family: var(--fm);
+}
+.mfg input, .mfg textarea, .mfg select {
+  width: 100%; background: var(--surf-low); border: 1px solid var(--surf-high);
+  border-radius: var(--r2); padding: 10px 13px; font-size: 13px; color: var(--on-surf);
+  font-family: var(--fb); outline: none; resize: none;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+.mfg input::placeholder, .mfg textarea::placeholder { color: var(--outvar); }
+.mfg input:focus, .mfg textarea:focus, .mfg select:focus {
+  border-color: var(--teal); background: var(--white);
+  box-shadow: 0 0 0 3px rgba(0,144,173,.1);
+}
+.mfg textarea { min-height: 80px; line-height: 1.6; }
+.mfg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media(max-width:480px){ .mfg-row { grid-template-columns: 1fr; } }
+
+.modal-optional {
+  font-size: 11px; color: var(--muted2); font-family: var(--fm);
+  background: var(--surf-low); border: 1px solid var(--surf-high);
+  border-radius: 6px; padding: 6px 10px; margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 6px;
+}
+
+/* Modal file preview strip */
+.modal-file-strip {
+  background: var(--surf-low); border: 1px solid var(--surf-high);
+  border-radius: var(--r2); padding: .8rem 1rem;
+  display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;
+}
+.modal-file-ico {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: rgba(0,144,173,.1);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.modal-file-ico svg { width: 16px; height: 16px; stroke: var(--teal); fill: none; stroke-width: 2; }
+.modal-file-name { font-size: 13px; font-weight: 600; color: var(--navy); font-family: var(--fd); }
+.modal-file-size { font-size: 11px; color: var(--muted2); font-family: var(--fm); }
+
+.modal-footer {
+  padding: 1rem 1.6rem 1.6rem;
+  display: flex; gap: .8rem; justify-content: flex-end;
+  border-top: 1px solid var(--surf-high);
+}
+.btn-modal-back {
+  background: var(--white); color: var(--muted); border: 1px solid var(--surf-high);
+  padding: 10px 20px; border-radius: var(--r2); font-size: 13px; font-weight: 700;
+  cursor: pointer; font-family: var(--fd); transition: all .18s; letter-spacing: -.01em;
+}
+.btn-modal-back:hover { border-color: var(--teal); color: var(--teal); }
+.btn-modal-next {
+  background: linear-gradient(135deg, var(--navy), var(--navy2));
+  color: #fff; border: none; padding: 10px 24px;
+  border-radius: var(--r2); font-size: 13px; font-weight: 700;
+  cursor: pointer; font-family: var(--fd); transition: all .2s;
+  display: flex; align-items: center; gap: 7px; letter-spacing: -.01em;
+  box-shadow: var(--sh);
+}
+.btn-modal-next:hover { transform: translateY(-1px); box-shadow: var(--sh2); }
+.btn-modal-next:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+
+/* Step panels */
+.modal-step-panel { display: none; }
+.modal-step-panel.active { display: block; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     PATIENT DETAILS MODAL
+     ══════════════════════════════════════ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <h2 id="modalTitle">Patient Details</h2>
+        <p>Please fill in details before analysis</p>
+      </div>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+    </div>
+
+    <div class="modal-body">
+
+      <!-- Step indicator -->
+      <div class="modal-steps">
+        <div class="modal-step active" id="step-ind-1">
+          <div class="step-dot">1</div>Patient
+        </div>
+        <div class="step-line"></div>
+        <div class="modal-step" id="step-ind-2">
+          <div class="step-dot">2</div>Clinical
+        </div>
+        <div class="step-line"></div>
+        <div class="modal-step" id="step-ind-3">
+          <div class="step-dot">3</div>Confirm
+        </div>
+      </div>
+
+      <!-- STEP 1: Patient info -->
+      <div class="modal-step-panel active" id="modal-panel-1">
+        <div class="mfg-row">
+          <div class="mfg">
+            <label>First Name <span style="color:var(--teal)">*</span></label>
+            <input type="text" id="pt-fname" placeholder="e.g. Priya" autocomplete="given-name"/>
+          </div>
+          <div class="mfg">
+            <label>Last Name <span style="color:var(--teal)">*</span></label>
+            <input type="text" id="pt-lname" placeholder="e.g. Sharma" autocomplete="family-name"/>
+          </div>
+        </div>
+        <div class="mfg-row">
+          <div class="mfg">
+            <label>Date of Birth <span style="color:var(--teal)">*</span></label>
+            <input type="date" id="pt-dob"/>
+          </div>
+          <div class="mfg">
+            <label>Gender</label>
+            <select id="pt-gender">
+              <option value="">Select…</option>
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+              <option>Prefer not to say</option>
+            </select>
+          </div>
+        </div>
+        <div class="mfg">
+          <label>Patient ID <span style="color:var(--muted2);font-weight:400">(optional)</span></label>
+          <input type="text" id="pt-id" placeholder="e.g. NI-2026-0042"/>
+        </div>
+      </div>
+
+      <!-- STEP 2: Clinical info -->
+      <div class="modal-step-panel" id="modal-panel-2">
+        <div class="mfg">
+          <label>Referring Physician <span style="color:var(--muted2);font-weight:400">(optional)</span></label>
+          <input type="text" id="pt-physician" placeholder="e.g. Dr. Siddharth"/>
+        </div>
+        <div class="mfg">
+          <label>Clinical History <span style="color:var(--teal)">*</span></label>
+          <textarea id="pt-history" placeholder="e.g. Presenting with persistent headaches and visual disturbances for 3 weeks. Suspected intracranial lesion on prior CT."></textarea>
+        </div>
+        <div class="mfg">
+          <label>MRI Sequences</label>
+          <input type="text" id="pt-sequences" placeholder="e.g. T1, T2, FLAIR Axial" value="T1 / T2 / FLAIR Axial"/>
+        </div>
+      </div>
+
+      <!-- STEP 3: Confirm -->
+      <div class="modal-step-panel" id="modal-panel-3">
+        <div id="modal-confirm-body" style="display:flex;flex-direction:column;gap:.6rem;"></div>
+        <!-- Scan file strip -->
+        <div class="modal-file-strip" style="margin-top:.8rem;">
+          <div class="modal-file-ico">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div>
+            <div class="modal-file-name" id="confirm-filename">—</div>
+            <div class="modal-file-size" id="confirm-filesize">MRI Scan</div>
+          </div>
+        </div>
+        <div class="modal-optional">
+          <svg width="13" height="13" fill="none" stroke="var(--teal)" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Patient data is used only for this report and is not stored.
+        </div>
+      </div>
+
+    </div><!-- end modal-body -->
+
+    <div class="modal-footer">
+      <button class="btn-modal-back" id="modalBackBtn" onclick="modalBack()" style="display:none;">← Back</button>
+      <button class="btn-modal-next" id="modalNextBtn" onclick="modalNext()">
+        Next <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 20 20" fill="none">
+        <circle cx="10" cy="10" r="8" stroke="white" stroke-width="1.5"/>
+        <path d="M6 10 Q10 4 14 10 Q10 16 6 10Z" fill="white"/>
+      </svg>
+    </div>
+    <div>
+      <span class="nav-logo-text">NeuroInsight</span>
+      <span class="nav-logo-sub">Brain Tumor Detection</span>
+    </div>
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html">Home</a>
+    <a href="analyse.html" class="active">Analyse</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <div class="nav-status"><span class="sdot" id="sdot"></span><span id="stext">checking…</span></div>
+    <div class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span>Analyse</span>
+    </div>
+    <div class="tag" style="margin-bottom:.8rem;"><span class="tag-dot"></span>AI-powered analysis</div>
+    <h1>MRI Brain Scan Analysis</h1>
+    <p>Upload an MRI slice to receive instant multi-task classification, Grad-CAM visualisation, and top-10 similar case retrieval from the indexed database.</p>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="analyse-wrap">
+  <div class="analyse-grid">
+
+    <!-- LEFT COL -->
+    <div class="left-col">
+
+      <!-- Upload panel -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">
+            <div class="pico ico-g">
+              <svg width="14" height="14" fill="none" stroke="var(--teal)" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+            </div>
+            Upload MRI Scan
+          </div>
+        </div>
+        <div class="panel-body">
+          <div id="alertBox" class="alert"></div>
+          <div class="upload-zone" id="uploadZone">
+            <input type="file" id="fileInput" accept=".png,.jpg,.jpeg,.tiff,.tif,.bmp"/>
+            <div class="upload-icon">
+              <svg width="26" height="26" fill="none" stroke="var(--teal)" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+            </div>
+            <h3>Drop MRI scan here</h3>
+            <p>or click to browse files</p>
+            <div class="format-tags">
+              <span class="format-tag">PNG</span>
+              <span class="format-tag">JPG</span>
+              <span class="format-tag">TIFF</span>
+              <span class="format-tag">BMP</span>
+            </div>
+            <img id="previewImg" class="prev-img" alt="Preview"/>
+          </div>
+          <button class="btn-analyze" id="analyzeBtn" disabled>
+            <div class="shimmer"></div>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <span id="btnText">Select an image first</span>
+          </button>
+          <button class="btn-rpt" id="reportBtn" onclick="downloadReport()">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Download NeuroInsight PDF Report
+          </button>
+        </div>
+      </div>
+
+      <!-- Diagnosis panel -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">
+            <div class="pico ico-b">
+              <svg width="14" height="14" fill="none" stroke="var(--teal)" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            Diagnosis Output
+          </div>
+          <span id="inferBadge" class="infer-badge" style="display:none;"></span>
+        </div>
+        <div class="panel-body" id="diagPanel">
+          <div class="placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <p>Upload and analyse an MRI<br>to see classification results</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end left -->
+
+    <!-- RIGHT COL -->
+    <div class="right-col">
+
+      <!-- Heatmap panel -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">
+            <div class="pico ico-p">
+              <svg width="14" height="14" fill="none" stroke="#7c3aed" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            Grad-CAM Visualisation
+          </div>
+        </div>
+        <div class="panel-body" id="heatmapPanel">
+          <div class="placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <p>Heatmap will appear here<br>after analysis</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Retrieval panel -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">
+            <div class="pico ico-o">
+              <svg width="14" height="14" fill="none" stroke="#c2770a" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            Similar Cases — FAISS Retrieval
+          </div>
+        </div>
+        <div class="panel-body" id="retrievalPanel">
+          <div class="placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <p>Top-10 similar cases will appear here</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end right -->
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand-name">NeuroInsight</div>
+      <div class="footer-copy">© 2026 NeuroInsight Diagnostic. Research Use Only.</div>
+    </div>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="contact.html">Contact Support</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const API = 'http://localhost:8002/api';
+let currentResult = null, selFile = null;
+let patientData = {};   // populated from modal
+let modalStep   = 1;
+
+/* ── Status check ── */
+async function checkStatus() {
+  try {
+    const r = await fetch(`${API}/health`, { signal: AbortSignal.timeout(3000) });
+    const d = await r.json();
+    if (d.status === 'ok') {
+      document.getElementById('sdot').className = 'sdot on';
+      document.getElementById('stext').textContent = `online · ${(d.index_size||0).toLocaleString()} vec`;
+      return;
+    }
+  } catch(e) {}
+  document.getElementById('sdot').className = 'sdot off';
+  document.getElementById('stext').textContent = 'offline';
+}
+checkStatus(); setInterval(checkStatus, 15000);
+
+/* ── File handling ── */
+const fileInput  = document.getElementById('fileInput');
+const uploadZone = document.getElementById('uploadZone');
+const previewImg = document.getElementById('previewImg');
+const analyzeBtn = document.getElementById('analyzeBtn');
+const btnText    = document.getElementById('btnText');
+
+fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
+uploadZone.addEventListener('dragover',  e => { e.preventDefault(); uploadZone.classList.add('drag'); });
+uploadZone.addEventListener('dragleave', ()  => uploadZone.classList.remove('drag'));
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault(); uploadZone.classList.remove('drag');
+  if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+});
+
+function handleFile(file) {
+  if (!file) return;
+  selFile = file;
+  previewImg.src = URL.createObjectURL(file);
+  previewImg.style.display = 'block';
+  analyzeBtn.disabled = false;
+  btnText.textContent = `Analyse "${file.name}"`;
+  showAlert('', '');
+}
+
+/* ── Analyse button → open modal first ── */
+analyzeBtn.addEventListener('click', () => {
+  if (!selFile) return;
+  openModal();
+});
+
+/* ════════════════════════════════════════
+   MODAL LOGIC
+   ════════════════════════════════════════ */
+function openModal() {
+  modalStep = 1;
+  updateModalStep();
+  // Pre-fill confirm file name
+  document.getElementById('confirm-filename').textContent = selFile.name;
+  document.getElementById('confirm-filesize').textContent =
+    (selFile.size / 1024).toFixed(1) + ' KB  ·  MRI Scan';
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+// Close on backdrop click
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+});
+
+function updateModalStep() {
+  // Step panels
+  document.querySelectorAll('.modal-step-panel').forEach((p, i) => {
+    p.classList.toggle('active', i + 1 === modalStep);
+  });
+  // Step indicators
+  for (let i = 1; i <= 3; i++) {
+    const ind = document.getElementById(`step-ind-${i}`);
+    ind.classList.toggle('active', i === modalStep);
+    ind.classList.toggle('done',   i < modalStep);
+  }
+  // Back button
+  document.getElementById('modalBackBtn').style.display = modalStep > 1 ? 'block' : 'none';
+  // Next button label
+  const nextBtn = document.getElementById('modalNextBtn');
+  if (modalStep === 3) {
+    nextBtn.innerHTML = `
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+      </svg>
+      Run Analysis`;
+  } else {
+    nextBtn.innerHTML = `Next
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+      </svg>`;
+  }
+  // If step 3, build confirm summary
+  if (modalStep === 3) buildConfirmStep();
+}
+
+function modalNext() {
+  if (modalStep === 1) {
+    // Validate required fields
+    const fname = document.getElementById('pt-fname').value.trim();
+    const lname = document.getElementById('pt-lname').value.trim();
+    const dob   = document.getElementById('pt-dob').value.trim();
+    if (!fname || !lname || !dob) {
+      highlightEmpty(['pt-fname','pt-lname','pt-dob']);
+      return;
+    }
+    modalStep = 2;
+    updateModalStep();
+  } else if (modalStep === 2) {
+    const history = document.getElementById('pt-history').value.trim();
+    if (!history) {
+      highlightEmpty(['pt-history']);
+      return;
+    }
+    modalStep = 3;
+    updateModalStep();
+  } else if (modalStep === 3) {
+    // Collect all patient data
+    patientData = {
+      name:       `${document.getElementById('pt-fname').value.trim()} ${document.getElementById('pt-lname').value.trim()}`,
+      dob:        formatDOB(document.getElementById('pt-dob').value),
+      gender:     document.getElementById('pt-gender').value || 'Not specified',
+      patientId:  document.getElementById('pt-id').value.trim() || generateId(),
+      physician:  document.getElementById('pt-physician').value.trim() || '[PHYSICIAN NAME]',
+      history:    document.getElementById('pt-history').value.trim(),
+      sequences:  document.getElementById('pt-sequences').value.trim() || 'T1 / T2 / FLAIR Axial',
+    };
+    closeModal();
+    runAnalysis();
+  }
+}
+
+function modalBack() {
+  if (modalStep > 1) { modalStep--; updateModalStep(); }
+}
+
+function highlightEmpty(ids) {
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el.value.trim()) {
+      el.style.borderColor = '#b91c1c';
+      el.style.boxShadow   = '0 0 0 3px rgba(185,28,28,.1)';
+      el.addEventListener('input', () => {
+        el.style.borderColor = '';
+        el.style.boxShadow   = '';
+      }, { once: true });
+    }
+  });
+}
+
+function formatDOB(val) {
+  if (!val) return '__ / __ / ____';
+  const [y, m, d] = val.split('-');
+  return `${d} / ${m} / ${y}`;
+}
+
+function generateId() {
+  return `NI-${new Date().getFullYear()}-${String(Math.floor(Math.random()*9000)+1000)}`;
+}
+
+function buildConfirmStep() {
+  const fname    = document.getElementById('pt-fname').value.trim();
+  const lname    = document.getElementById('pt-lname').value.trim();
+  const dob      = formatDOB(document.getElementById('pt-dob').value);
+  const gender   = document.getElementById('pt-gender').value || 'Not specified';
+  const physician= document.getElementById('pt-physician').value.trim() || '—';
+  const history  = document.getElementById('pt-history').value.trim();
+
+  const rows = [
+    ['Patient Name',       `${fname} ${lname}`],
+    ['Date of Birth',      dob],
+    ['Gender',             gender],
+    ['Referring Physician',physician],
+    ['Clinical History',   history],
+  ];
+
+  document.getElementById('modal-confirm-body').innerHTML = rows.map(([l, v]) => `
+    <div style="display:flex;gap:1rem;padding:.5rem 0;border-bottom:1px solid var(--surf-high);align-items:flex-start;">
+      <div style="font-size:11px;font-family:var(--fm);color:var(--muted2);font-weight:700;text-transform:uppercase;letter-spacing:.05em;min-width:130px;flex-shrink:0;">${l}</div>
+      <div style="font-size:13px;color:var(--on-surf);font-family:var(--fb);line-height:1.5;">${v}</div>
+    </div>`).join('');
+}
+
+/* ── Run analysis (called after modal confirm) ── */
+async function runAnalysis() {
+  analyzeBtn.disabled = true;
+  analyzeBtn.classList.add('loading');
+  btnText.textContent = 'Analysing…';
+  showAlert('', '');
+  resetResults();
+
+  const fd = new FormData();
+  fd.append('file', selFile);
+
+  try {
+    const res  = await fetch(`${API}/predict`, { method: 'POST', body: fd });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || 'Server error');
+
+    // Attach patient data to result so PDF generator can use it
+    data.patient = patientData;
+    currentResult = data;
+
+    renderDiag(data);
+    renderHeatmap(data);
+    renderRetrieval(data);
+    document.getElementById('reportBtn').style.display = 'flex';
+    showAlert(`Analysis complete in ${data.inference_ms}ms`, 'success');
+  } catch(err) {
+    showAlert(`Error: ${err.message}`, 'error');
+  } finally {
+    analyzeBtn.disabled = false;
+    analyzeBtn.classList.remove('loading');
+    btnText.textContent = `Re-analyse "${selFile.name}"`;
+  }
+}
+
+/* ── Render diagnosis ── */
+function renderDiag(data) {
+  const d = data.diagnosis, c = data.confidence;
+  const ib = document.getElementById('inferBadge');
+  ib.style.display = 'inline-flex';
+  ib.textContent = `${data.inference_ms}ms`;
+
+  // ── No tumor detected ──
+  if (d.tumor_present === false) {
+    document.getElementById('diagPanel').innerHTML = `
+      <div class="sev-banner" style="background:rgba(29,158,117,0.08);border:1px solid rgba(29,158,117,0.25);">
+        <div class="sev-ico" style="background:rgba(29,158,117,0.08);">✓</div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:#1d9e75;margin-bottom:2px;">NO TUMOR DETECTED</div>
+          <div style="font-size:12px;color:var(--muted);">No malignancy identified. Routine monitoring advised.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.3rem;">
+        <span class="diag-badge badge-low" style="font-size:11px;">Tumor Not Detected</span>
+        ${d.tumor_confidence !== undefined
+          ? `<span class="diag-badge badge-generic" style="font-size:11px;font-family:var(--fm);">Conf: ${d.tumor_confidence}%</span>`
+          : ''}
+      </div>`;
+    return;
+  }
+
+  // ── Tumor detected ──
+  const sevCfg = {
+    high:   { col: '#b91c1c', bg: 'rgba(185,28,28,0.08)',  brd: 'rgba(185,28,28,0.25)',  ico: '⚠', msg: 'Urgent specialist review strongly recommended.' },
+    medium: { col: '#c2770a', bg: 'rgba(194,119,10,0.08)', brd: 'rgba(194,119,10,0.25)', ico: '⚡', msg: 'Clinical follow-up and specialist review recommended.' },
+    low:    { col: '#1d9e75', bg: 'rgba(29,158,117,0.08)', brd: 'rgba(29,158,117,0.25)', ico: '✓', msg: 'Routine monitoring advised.' },
+  }[d.severity] || { col: 'var(--muted)', bg: 'var(--surf-low)', brd: 'var(--surf-high)', ico: '·', msg: '' };
+
+  const gc = d.grade === 'HGG' ? '#7c3aed' : '#1d4ed8';
+  const cells = [
+    { l: 'Tumor Grade', v: d.grade,    c: c.grade,    col: gc },
+    { l: 'Severity',    v: d.severity, c: c.severity, col: sevCfg.col },
+    { l: 'Tumor Size',  v: d.size,     c: c.size,     col: 'var(--on-surf)' },
+    { l: 'Location',    v: d.location, c: c.location, col: 'var(--on-surf)' },
+  ];
+
+  document.getElementById('diagPanel').innerHTML = `
+    <div class="sev-banner" style="background:${sevCfg.bg};border:1px solid ${sevCfg.brd};">
+      <div class="sev-ico" style="background:${sevCfg.bg};">${sevCfg.ico}</div>
+      <div>
+        <div style="font-size:12px;font-weight:600;color:${sevCfg.col};margin-bottom:2px;">${d.severity.toUpperCase()} SEVERITY</div>
+        <div style="font-size:12px;color:var(--muted);">${sevCfg.msg}</div>
+      </div>
+    </div>
+    <div class="diag-grid2">
+      ${cells.map(x => `
+        <div class="dcell">
+          <div class="dc-lbl">${x.l}</div>
+          <div class="dc-val" style="color:${x.col}">${x.v.toUpperCase()}</div>
+          <div class="dc-conf">
+            <div class="ct"><div class="cf" style="width:${x.c}%;background:${x.col}"></div></div>
+            <span class="cp">${x.c}%</span>
+          </div>
+        </div>`).join('')}
+    </div>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.3rem;">
+      <span class="diag-badge badge-hgg" style="font-size:11px;">Tumor Detected</span>
+      ${d.tumor_confidence !== undefined
+        ? `<span class="diag-badge badge-generic" style="font-size:11px;font-family:var(--fm);">Conf: ${d.tumor_confidence}%</span>`
+        : ''}
+    </div>`;
+}
+
+/* ── Render heatmap ── */
+function renderHeatmap(data) {
+  document.getElementById('heatmapPanel').innerHTML = `
+    <div class="heatmap-grid">
+      <div>
+        <div class="heatmap-img-wrap"><img src="data:image/png;base64,${data.images.original}" alt="Original"/></div>
+        <div class="heatmap-label">Original MRI</div>
+      </div>
+      <div>
+        <div class="heatmap-img-wrap"><img src="data:image/png;base64,${data.images.heatmap}" alt="Grad-CAM"/></div>
+        <div class="heatmap-label">Grad-CAM Overlay</div>
+      </div>
+    </div>
+    <p style="font-size:11px;color:var(--muted2);margin-top:.8rem;text-align:center;font-family:var(--fm);">
+      Red = high activation · Model focused on highlighted region
+    </p>`;
+}
+
+/* ── Render retrieval ── */
+function renderRetrieval(data) {
+  // No tumor → skip retrieval
+  if (data.diagnosis.tumor_present === false) {
+    document.getElementById('retrievalPanel').innerHTML = `
+      <div class="placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="8" y1="8" x2="16" y2="16"/>
+          <line x1="16" y1="8" x2="8" y2="16"/>
+        </svg>
+        <p>No similar cases retrieved —<br>no tumor was detected in this scan.</p>
+      </div>`;
+    return;
+  }
+
+  const { results, total_searched, returned } = data.retrieval;
+  const gm = results.filter(r => r.diagnosis.grade === data.diagnosis.grade).length;
+
+  const items = results.map(r => {
+    const d = r.diagnosis, top = r.rank <= 3;
+    return `
+      <div class="result-item">
+        <div class="rank-badge ${top ? 'top' : ''}">#${r.rank}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:600;color:var(--on-surf);font-family:var(--fd);">${d.grade} · ${d.severity} severity</div>
+          <div class="result-tags">
+            <span class="result-tag">Size: ${d.size}</span>
+            <span class="result-tag">Loc: ${d.location}</span>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('retrievalPanel').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;">
+      <span style="font-size:12px;color:var(--muted2);font-family:var(--fm);">Searched ${total_searched} candidates</span>
+      <span style="font-size:12px;color:var(--teal);font-family:var(--fm);font-weight:700;">Grade match: ${gm}/${returned}</span>
+    </div>
+    ${items}`;
+}
+
+/* ── Download report ── */
+async function downloadReport() {
+  if (!currentResult) return;
+  const btn = document.getElementById('reportBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="animation:spin .7s linear infinite"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Generating…';
+  try {
+    const res = await fetch(`${API}/report`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(currentResult)   // includes currentResult.patient
+    });
+    if (!res.ok) throw new Error('PDF generation failed');
+    const blob = await res.blob();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    const safeName = (currentResult.patient?.name || 'report')
+    .trim()
+    .replace(/\s+/g, '_')
+    .replace(/[^a-zA-Z0-9_\-]/g, '');
+    a.download = `${safeName}_NeuroInsight_Report.pdf`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  } catch(err) {
+    showAlert(`PDF error: ${err.message}`, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Download NeuroInsight PDF Report';
+  }
+}
+
+/* ── Helpers ── */
+function showAlert(msg, type) {
+  const b = document.getElementById('alertBox');
+  b.className = `alert ${type === 'error' ? 'alert-error' : 'alert-success'}`;
+  b.textContent = msg;
+  b.style.display = msg ? 'flex' : 'none';
+}
+
+function resetResults() {
+  const ph = msg => `<div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/></svg><p>${msg}</p></div>`;
+  document.getElementById('diagPanel').innerHTML      = ph('Analysing…');
+  document.getElementById('heatmapPanel').innerHTML   = ph('Generating heatmap…');
+  document.getElementById('retrievalPanel').innerHTML = ph('Searching index…');
+  document.getElementById('reportBtn').style.display  = 'none';
+  document.getElementById('inferBadge').style.display = 'none';
+}
+</script>
+</body>
+</html>
