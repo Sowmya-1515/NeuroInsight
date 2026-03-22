@@ -43,7 +43,7 @@ if not os.path.exists(MODEL_PATH):
     print("[NeuroInsight] Downloading model from Hugging Face...")
     urllib.request.urlretrieve(HF_MODEL_URL, MODEL_PATH)
     print("[NeuroInsight] Model downloaded successfully!")
-    
+
 FAISS_DIR      = os.path.join(BASE_DIR, "faiss_index")
 EMBEDDINGS_DIR = os.path.join(BASE_DIR, "embeddings_output")
 
@@ -428,4 +428,5 @@ if __name__ == "__main__":
     print(f"  BASE_DIR: {BASE_DIR}")
     print("  Starting at http://localhost:8002")
     print("=" * 60)
-    app.run(debug=True, host="0.0.0.0", port=8002)
+    port = int(os.environ.get("PORT", 8002))
+        app.run(debug=False, host="0.0.0.0", port=port)
