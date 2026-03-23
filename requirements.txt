@@ -1,8 +1,8 @@
 flask
 flask-cors
 --extra-index-url https://download.pytorch.org/whl/cpu
-torch==2.2.0+cpu
-torchvision==0.17.0+cpu
+torch==2.10.0+cpu
+torchvision==0.21.0+cpu
 faiss-cpu
 pillow
 numpy
