@@ -12,6 +12,7 @@ Endpoints:
 
 import os
 import io
+import gc
 import time
 import base64
 import threading
@@ -152,6 +153,12 @@ class GradCAM:
         cam_min, cam_max = cam.min(), cam.max()
         if cam_max - cam_min > 1e-8:
             cam = (cam - cam_min) / (cam_max - cam_min)
+
+        # Free gradients/activations after use
+        self.gradients   = None
+        self.activations = None
+        gc.collect()
+
         return cam
 
 
@@ -194,15 +201,10 @@ class RetrievalEngine:
         self._load()
 
     def _get_device(self):
-        if torch.backends.mps.is_available():
-            return torch.device("mps")
-        if torch.cuda.is_available():
-            return torch.device("cuda")
+        # Always use CPU on Render free tier — MPS/CUDA use extra memory
         return torch.device("cpu")
 
     def _load(self):
-        # ── FIX: Download model from Hugging Face INSIDE _load ──
-        # This runs in a background thread so gunicorn can bind the port first
         if not os.path.exists(MODEL_PATH):
             print("[NeuroInsight] Model not found locally, downloading from Hugging Face...")
             os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
@@ -213,17 +215,24 @@ class RetrievalEngine:
 
         print(f"[NeuroScan] Device: {self.device}")
 
-        # Load model
+        # Load model — use map_location=cpu and free state_dict immediately
         print("[NeuroInsight] Loading model...")
-        self.model = Phase2Model(embedding_dim=EMBED_DIM, pretrained=False).to(self.device)
-        missing, unexpected = self.model.load_state_dict(
-            torch.load(MODEL_PATH, map_location=self.device), strict=False
-        )
+        self.model = Phase2Model(embedding_dim=EMBED_DIM, pretrained=False)
+        state_dict = torch.load(MODEL_PATH, map_location="cpu")
+        missing, unexpected = self.model.load_state_dict(state_dict, strict=False)
+        del state_dict  # free memory immediately after loading
+        gc.collect()
+
         if missing:
             print(f"[NeuroInsight] Missing keys: {missing}")
         if unexpected:
             print(f"[NeuroInsight] Unexpected keys: {unexpected}")
+
         self.model.eval()
+
+        # Disable gradients globally for the model — saves memory
+        for param in self.model.parameters():
+            param.requires_grad = False
 
         # Grad-CAM
         target_layer  = list(self.model.encoder.children())[-3][-1].conv3
@@ -242,6 +251,7 @@ class RetrievalEngine:
         print(f"[NeuroScan] Metadata loaded ✓  ({len(self.metadata)} rows)")
 
         self.ready = True
+        gc.collect()
         print("[NeuroScan] RetrievalEngine ready ✓\n")
 
     def _softmax_conf(self, logits):
@@ -271,9 +281,11 @@ class RetrievalEngine:
         pil_img    = Image.open(BytesIO(image_bytes)).convert("RGB")
         img_tensor = self.transform(pil_img).unsqueeze(0).to(self.device)
 
+        # Run inference inside no_grad to avoid storing computation graph
         with torch.no_grad():
             outputs = self.model(img_tensor)
 
+        # Extract all needed values immediately as Python scalars / numpy
         grade_idx    = outputs["grade_logits"].argmax(1).item()
         severity_idx = outputs["severity_logits"].argmax(1).item()
         size_idx     = outputs["size_logits"].argmax(1).item()
@@ -283,12 +295,6 @@ class RetrievalEngine:
                         if outputs["tumor_confidence"].dim() == 0
                         else float(outputs["tumor_confidence"][0].item()))
 
-        query_attrs = {
-            "grade":    GRADE_MAP[grade_idx],
-            "severity": SEVERITY_MAP[severity_idx],
-            "size":     SIZE_MAP[size_idx],
-            "location": LOCATION_MAP[location_idx],
-        }
         confidence = {
             "grade":    round(self._softmax_conf(outputs["grade_logits"]) * 100, 1),
             "severity": round(self._softmax_conf(outputs["severity_logits"]) * 100, 1),
@@ -297,7 +303,19 @@ class RetrievalEngine:
         }
 
         embedding = outputs["embedding"].cpu().numpy().astype("float32")
-        norm      = np.linalg.norm(embedding)
+
+        # Free outputs and tensor immediately after extraction
+        del outputs
+        gc.collect()
+
+        query_attrs = {
+            "grade":    GRADE_MAP[grade_idx],
+            "severity": SEVERITY_MAP[severity_idx],
+            "size":     SIZE_MAP[size_idx],
+            "location": LOCATION_MAP[location_idx],
+        }
+
+        norm = np.linalg.norm(embedding)
         if norm > 0:
             embedding = embedding / norm
 
@@ -345,10 +363,23 @@ class RetrievalEngine:
                 "image_path": row["image_path"],
             })
 
-        cam          = self.grad_cam.generate(img_tensor.clone())
-        heatmap_b64  = apply_heatmap(pil_img, cam)
         original_b64 = img_to_base64(pil_img.resize((IMG_SIZE, IMG_SIZE)))
-        inference_ms = round((time.time() - t0) * 1000)
+
+        # GradCAM — fallback to original if OOM
+        try:
+            # Re-run forward with grad enabled only for GradCAM
+            img_tensor_grad = self.transform(pil_img).unsqueeze(0).to(self.device)
+            cam         = self.grad_cam.generate(img_tensor_grad)
+            heatmap_b64 = apply_heatmap(pil_img, cam)
+            del img_tensor_grad, cam
+        except Exception as e:
+            print(f"[NeuroInsight] GradCAM skipped due to: {e}")
+            heatmap_b64 = original_b64  # fallback
+        finally:
+            del img_tensor
+            gc.collect()
+
+        inference_ms   = round((time.time() - t0) * 1000)
         severity_score = {"low": 0.25, "medium": 0.60, "high": 0.92}[query_attrs["severity"]]
 
         return {
@@ -392,7 +423,7 @@ def get_engine():
     return engine
 
 
-# ── Load engine in background thread so gunicorn binds port immediately ──
+# Load engine in background thread so gunicorn binds port immediately
 def preload_engine():
     global engine
     print("[NeuroInsight] Pre-loading engine in background thread...")
